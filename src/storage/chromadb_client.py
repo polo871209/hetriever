@@ -229,14 +229,19 @@ class ChromaDBClient:
         query: str,
         limit: int = 10,
         where: dict | None = None,
+        rerank: bool = True,
     ) -> RetrievalResult:
-        """Search for similar chunks using semantic vector similarity.
+        """Search for similar chunks using semantic vector similarity with optional reranking.
+
+        First performs bi-encoder search to retrieve initial candidates, then optionally
+        reranks using a cross-encoder for improved accuracy.
 
         Args:
             collection: ChromaDB collection to search.
             query: Natural language search query.
             limit: Maximum number of results (1-100, default 10).
             where: Optional metadata filter (ChromaDB where clause).
+            rerank: Whether to rerank results with cross-encoder (default True).
 
         Returns:
             RetrievalResult containing matches and search metadata.
@@ -253,17 +258,17 @@ class ChromaDBClient:
 
         start_time = time.perf_counter()
 
+        initial_limit = limit * 3 if rerank else limit
+
         try:
             results = collection.query(
                 query_texts=[query],
-                n_results=limit,
+                n_results=min(initial_limit, MAX_SEARCH_LIMIT),
                 where=where,
                 include=["documents", "metadatas", "distances"],
             )
         except Exception as e:
             raise ChromaDBConnectionError(f"Search failed: {e}") from e
-
-        search_time_ms = (time.perf_counter() - start_time) * 1000
 
         matches = []
         ids_list = results.get("ids")
@@ -303,12 +308,43 @@ class ChromaDBClient:
                     )
                 )
 
+        if rerank and matches:
+            matches = self._rerank_matches(query, matches, limit)
+
+        search_time_ms = (time.perf_counter() - start_time) * 1000
+
         return RetrievalResult(
             query=query,
-            matches=matches,
-            total_results=len(matches),
+            matches=matches[:limit],
+            total_results=len(matches[:limit]),
             search_time_ms=search_time_ms,
         )
+
+    def _rerank_matches(
+        self, query: str, matches: list[RetrievalMatch], top_k: int
+    ) -> list[RetrievalMatch]:
+        """Rerank matches using cross-encoder for improved accuracy.
+
+        Args:
+            query: Original search query.
+            matches: Initial retrieval matches to rerank.
+            top_k: Number of top results to return after reranking.
+
+        Returns:
+            Reranked list of matches with updated scores.
+        """
+        if not hasattr(self, "_reranker"):
+            from sentence_transformers import CrossEncoder
+
+            self._reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+        pairs = [[query, match.content] for match in matches]
+        scores = self._reranker.predict(pairs)
+
+        for match, score in zip(matches, scores):
+            match.score = float(score)
+
+        return sorted(matches, key=lambda x: x.score, reverse=True)[:top_k]
 
     def list_collections(self) -> list[CollectionInfo]:
         """List all collections with their metadata and statistics.

@@ -64,9 +64,15 @@ def index(ctx: click.Context, path: Path, repo: str | None, force: bool, verbose
 @click.option("--repo", help="Search only specified repository")
 @click.option("--limit", default=5, help="Maximum results to return")
 @click.option("--format", "output_format", type=click.Choice(["text", "json"]), default="text")
+@click.option("--no-rerank", is_flag=True, help="Disable reranking for faster search")
 @click.pass_context
 def search(
-    ctx: click.Context, query: str, repo: str | None, limit: int, output_format: str
+    ctx: click.Context,
+    query: str,
+    repo: str | None,
+    limit: int,
+    output_format: str,
+    no_rerank: bool,
 ) -> None:
     """Search indexed documentation using semantic similarity.
 
@@ -79,11 +85,12 @@ def search(
         repo: Optional repository name to scope search.
         limit: Maximum number of results to return (default 10).
         output_format: Output format - 'text' or 'json'.
+        no_rerank: If True, skip reranking for faster results.
     """
     from src.cli.commands.search import search_command  # noqa: PLC0415
 
     db_path = ctx.obj["db_path"]
-    search_command(db_path, query, repo, limit, output_format)
+    search_command(db_path, query, repo, limit, output_format, not no_rerank)
 
 
 @cli.command()

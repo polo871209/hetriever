@@ -22,6 +22,7 @@ def search_command(
     repo: str | None,
     limit: int,
     output_format: str,
+    rerank: bool = True,
 ) -> None:
     logger.debug(f"Search command: query='{query}', repo={repo}, limit={limit}")
 
@@ -43,7 +44,7 @@ def search_command(
             logger.debug(f"Searching in repository: {repo}")
             try:
                 collection = db_client.get_collection(repo)
-                result = db_client.search_chunks(collection, query, limit)
+                result = db_client.search_chunks(collection, query, limit, rerank=rerank)
                 logger.info(
                     f"Found {result.total_results} results in {repo} "
                     f"({result.search_time_ms:.2f}ms)"
@@ -66,7 +67,7 @@ def search_command(
             for col_info in collections:
                 try:
                     collection = db_client.get_collection(col_info.name)
-                    result = db_client.search_chunks(collection, query, limit)
+                    result = db_client.search_chunks(collection, query, limit, rerank=rerank)
                     all_matches.extend(result.matches)
                     total_search_time += result.search_time_ms
                     logger.debug(f"Searched {col_info.name}: {len(result.matches)} matches")
