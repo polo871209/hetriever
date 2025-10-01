@@ -3,8 +3,9 @@ set quiet
 default:
     @just --list
 
-install:
-    uv sync --all-extras
+init:
+    git submodule update --init --recursive
+    uv sync --dev
 
 test:
     uv run pytest
@@ -24,22 +25,8 @@ test-benchmark:
 test-property:
     uv run pytest -m property
 
-lint:
-    uv run ruff check .
-
-format:
-    uv run ruff format .
-
-format-check:
-    uv run ruff format --check .
-
-typecheck:
-    uv run python -m mypy src
-
 clean:
     rm -rf chroma_data/
     rm -rf .pytest_cache
     rm -rf .ruff_cache
     rm -rf **/__pycache__
-
-ci: lint format-check test

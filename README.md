@@ -2,11 +2,12 @@
 
 **H**ugo documentation r**etriever** with vector embeddings for semantic search.
 
-A Python tool that indexes markdown documentation from Hugo sites and provides semantic search capabilities using ChromaDB.
+A Python tool that indexes markdown documentation from Hugo sites and provides semantic search capabilities using ChromaDB with high-quality embeddings (`sentence-transformers/all-mpnet-base-v2`).
 
 ## Features
 
 - **Semantic Search**: Find documentation by meaning, not just keywords
+- **High-Quality Embeddings**: Uses `all-mpnet-base-v2` for superior search accuracy
 - **Multi-Repository Support**: Index and search across multiple documentation repositories
 - **Hugo-Aware Cleaning**: Removes frontmatter, shortcodes, and Hugo-specific syntax
 - **Context-Preserving Chunking**: Maintains heading hierarchy and document structure
@@ -18,23 +19,23 @@ A Python tool that indexes markdown documentation from Hugo sites and provides s
 ### Prerequisites
 
 - Python 3.13+
-- [uv](https://github.com/astral-sh/uv) (recommended) or pip
-- [just](https://github.com/casey/just) (optional, for running recipes)
+- [uv](https://github.com/astral-sh/uv)
 
-### Install with uv
+### Install
 
 ```bash
 git clone https://github.com/yourusername/hetriever.git
 cd hetriever
-uv sync --all-extras
+just init
 ```
 
-### Install with pip
+Or manually:
 
 ```bash
 git clone https://github.com/yourusername/hetriever.git
 cd hetriever
-pip install -e ".[dev]"
+git submodule update --init --recursive
+uv sync --dev
 ```
 
 ## Quick Start
@@ -44,13 +45,13 @@ pip install -e ".[dev]"
 Index a Hugo documentation repository:
 
 ```bash
-uv run python -m src.cli.main index /path/to/hugo/docs
+uv run ch index /path/to/hugo/docs
 ```
 
 Index a specific repository name:
 
 ```bash
-uv run python -m src.cli.main index /path/to/docs --repo my-docs
+uv run ch index /path/to/docs --repo my-docs
 ```
 
 ### 2. Search Documentation
@@ -58,19 +59,19 @@ uv run python -m src.cli.main index /path/to/docs --repo my-docs
 Search indexed documentation:
 
 ```bash
-uv run python -m src.cli.main search "how to configure authentication"
+uv run ch search "how to configure authentication"
 ```
 
 Limit results:
 
 ```bash
-uv run python -m src.cli.main search "deployment guide" --limit 5
+uv run ch search "deployment guide" --limit 5
 ```
 
 Filter by repository:
 
 ```bash
-uv run python -m src.cli.main search "API reference" --repo my-docs
+uv run ch search "API reference" --repo my-docs
 ```
 
 ### 3. List Collections
@@ -78,7 +79,7 @@ uv run python -m src.cli.main search "API reference" --repo my-docs
 View all indexed repositories:
 
 ```bash
-uv run python -m src.cli.main list
+uv run ch list
 ```
 
 ### 4. Remove Collections
@@ -86,13 +87,7 @@ uv run python -m src.cli.main list
 Remove a specific repository:
 
 ```bash
-uv run python -m src.cli.main remove my-docs
-```
-
-Remove all collections:
-
-```bash
-uv run python -m src.cli.main remove --all
+uv run ch remove my-docs
 ```
 
 ## CLI Commands
@@ -102,18 +97,20 @@ uv run python -m src.cli.main remove --all
 Index markdown documentation from a directory.
 
 ```bash
-uv run python -m src.cli.main index [OPTIONS] PATH
+uv run ch index [OPTIONS] PATH
 ```
 
 **Options:**
+
 - `--repo TEXT`: Repository name (defaults to directory name)
 - `--force`: Force reindex even if unchanged
 - `--verbose, -v`: Show detailed processing logs
 - `--db-path PATH`: ChromaDB storage path (default: `./chroma_data`)
 
 **Example:**
+
 ```bash
-uv run python -m src.cli.main index /path/to/docs --repo production-docs --verbose
+uv run ch index /path/to/docs --repo production-docs --verbose
 ```
 
 ### `search`
@@ -121,17 +118,20 @@ uv run python -m src.cli.main index /path/to/docs --repo production-docs --verbo
 Search indexed documentation with semantic search.
 
 ```bash
-uv run python -m src.cli.main search [OPTIONS] QUERY
+uv run ch search [OPTIONS] QUERY
 ```
 
 **Options:**
+
 - `--repo TEXT`: Filter by repository name
 - `--limit INTEGER`: Maximum results to return (default: 10)
+- `--format [text|json]`: Output format (default: text)
 - `--db-path PATH`: ChromaDB storage path (default: `./chroma_data`)
 
 **Example:**
+
 ```bash
-uv run python -m src.cli.main search "authentication setup" --repo my-docs --limit 5
+uv run ch search "authentication setup" --repo my-docs --limit 5
 ```
 
 ### `list`
@@ -139,10 +139,12 @@ uv run python -m src.cli.main search "authentication setup" --repo my-docs --lim
 List all indexed repository collections.
 
 ```bash
-uv run python -m src.cli.main list [OPTIONS]
+uv run ch list [OPTIONS]
 ```
 
 **Options:**
+
+- `--format [text|json]`: Output format (default: text)
 - `--db-path PATH`: ChromaDB storage path (default: `./chroma_data`)
 
 ### `remove`
@@ -150,20 +152,18 @@ uv run python -m src.cli.main list [OPTIONS]
 Remove indexed repository collections.
 
 ```bash
-uv run python -m src.cli.main remove [OPTIONS] [REPO]
+uv run ch remove [OPTIONS] REPO
 ```
 
 **Options:**
-- `--all`: Remove all collections
+
+- `--confirm`: Skip confirmation prompt
 - `--db-path PATH`: ChromaDB storage path (default: `./chroma_data`)
 
-**Examples:**
-```bash
-# Remove specific repository
-uv run python -m src.cli.main remove my-docs
+**Example:**
 
-# Remove all collections
-uv run python -m src.cli.main remove --all
+```bash
+uv run ch remove my-docs --confirm
 ```
 
 ## Configuration
@@ -173,28 +173,23 @@ uv run python -m src.cli.main remove --all
 Set the ChromaDB storage location:
 
 **Via environment variable:**
+
 ```bash
 export HETRIEVER_DB_PATH=/path/to/chroma_data
 ```
 
 **Via command-line option:**
-```bash
-uv run python -m src.cli.main --db-path /custom/path search "query"
-```
 
-### Logging
-
-Set log level via environment:
 ```bash
-export HETRIEVER_LOG_LEVEL=DEBUG
+uv run ch --db-path /custom/path search "query"
 ```
 
 ## Development
 
-### Install Development Dependencies
+### Setup
 
 ```bash
-uv sync --all-extras
+just init
 ```
 
 ### Run Tests
@@ -211,35 +206,10 @@ just test-benchmark
 just test-property
 ```
 
-### Linting and Formatting
-
-```bash
-# Check code style
-just lint
-
-# Format code
-just format
-
-# Check formatting without changes
-just format-check
-```
-
-### Type Checking
-
-```bash
-just typecheck
-```
-
 ### Clean Build Artifacts
 
 ```bash
 just clean
-```
-
-### Run CI Checks
-
-```bash
-just ci
 ```
 
 ## Project Structure

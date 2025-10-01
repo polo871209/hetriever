@@ -12,12 +12,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest",
-    "pytest-benchmark",
-    "hypothesis",
-    "ruff",
-]
+dev = ["pytest", "pytest-benchmark", "hypothesis", "ruff"]
+
+[project.scripts]
+ch = "src.cli.main:cli"
 
 [build-system]
 requires = ["hatchling"]
@@ -31,7 +29,25 @@ line-length = 100
 target-version = "py313"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "DTZ", "T20", "RET", "SIM", "ARG", "PTH", "PL", "RUF"]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+    "N",
+    "UP",
+    "B",
+    "A",
+    "C4",
+    "DTZ",
+    "T20",
+    "RET",
+    "SIM",
+    "ARG",
+    "PTH",
+    "PL",
+    "RUF",
+]
 ignore = []
 
 [tool.ruff.lint.per-file-ignores]

@@ -62,7 +62,7 @@ def index(ctx: click.Context, path: Path, repo: str | None, force: bool, verbose
 @cli.command()
 @click.argument("query")
 @click.option("--repo", help="Search only specified repository")
-@click.option("--limit", default=10, help="Maximum results to return")
+@click.option("--limit", default=5, help="Maximum results to return")
 @click.option("--format", "output_format", type=click.Choice(["text", "json"]), default="text")
 @click.pass_context
 def search(
