@@ -9,110 +9,110 @@
 
 ## Phase 3.1: Setup
 
-- [ ] T001 Create project structure with `src/`, `tests/`, `chroma_data/`
-- [ ] T002 Initialize Python project with `pyproject.toml` and `justfile` build automation
-- [ ] T003 [P] Configure dependencies: `uv add chromadb pyyaml pytest pytest-benchmark hypothesis`
-- [ ] T004 [P] Configure linting with `ruff check .` and formatting rules
+- [x] T001 Create project structure with `src/`, `tests/`, `chroma_data/`
+- [x] T002 Initialize Python project with `pyproject.toml` and `justfile` build automation
+- [x] T003 [P] Configure dependencies: `uv add chromadb pyyaml pytest pytest-benchmark hypothesis`
+- [x] T004 [P] Configure linting with `ruff check .` and formatting rules
 
 ## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
 
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
 
 ### Contract Tests
-- [ ] T005 [P] Contract test `parse_frontmatter` in `tests/contract/test_cleaning_contract.py`
-- [ ] T006 [P] Contract test `clean_shortcodes` in `tests/contract/test_cleaning_contract.py`
-- [ ] T007 [P] Contract test `clean_code_fences` in `tests/contract/test_cleaning_contract.py`
-- [ ] T008 [P] Contract test `clean_links` in `tests/contract/test_cleaning_contract.py`
-- [ ] T009 [P] Contract test `normalize_whitespace` in `tests/contract/test_cleaning_contract.py`
-- [ ] T010 [P] Contract test `clean_markdown` full pipeline in `tests/contract/test_cleaning_contract.py`
-- [ ] T011 [P] Contract test ChromaDB `create_collection` in `tests/contract/test_chromadb_contract.py`
-- [ ] T012 [P] Contract test ChromaDB `add_chunks` in `tests/contract/test_chromadb_contract.py`
-- [ ] T013 [P] Contract test ChromaDB `search_chunks` in `tests/contract/test_chromadb_contract.py`
-- [ ] T014 [P] Contract test ChromaDB `get_collection_metadata` in `tests/contract/test_chromadb_contract.py`
-- [ ] T015 [P] Contract test ChromaDB `list_collections` in `tests/contract/test_chromadb_contract.py`
-- [ ] T016 [P] Contract test ChromaDB `delete_collection` in `tests/contract/test_chromadb_contract.py`
-- [ ] T017 [P] Contract test CLI `index` command in `tests/contract/test_cli_contract.py`
-- [ ] T018 [P] Contract test CLI `search` command in `tests/contract/test_cli_contract.py`
-- [ ] T019 [P] Contract test CLI `list` command in `tests/contract/test_cli_contract.py`
-- [ ] T020 [P] Contract test CLI `remove` command in `tests/contract/test_cli_contract.py`
-- [ ] T021 [P] Contract test CLI global options (--db-path, --verbose) in `tests/contract/test_cli_contract.py`
+- [x] T005 [P] Contract test `parse_frontmatter` in `tests/contract/test_cleaning_contract.py`
+- [x] T006 [P] Contract test `clean_shortcodes` in `tests/contract/test_cleaning_contract.py`
+- [x] T007 [P] Contract test `clean_code_fences` in `tests/contract/test_cleaning_contract.py`
+- [x] T008 [P] Contract test `clean_links` in `tests/contract/test_cleaning_contract.py`
+- [x] T009 [P] Contract test `normalize_whitespace` in `tests/contract/test_cleaning_contract.py`
+- [x] T010 [P] Contract test `clean_markdown` full pipeline in `tests/contract/test_cleaning_contract.py`
+- [x] T011 [P] Contract test ChromaDB `create_collection` in `tests/contract/test_chromadb_contract.py`
+- [x] T012 [P] Contract test ChromaDB `add_chunks` in `tests/contract/test_chromadb_contract.py`
+- [x] T013 [P] Contract test ChromaDB `search_chunks` in `tests/contract/test_chromadb_contract.py`
+- [x] T014 [P] Contract test ChromaDB `get_collection_metadata` in `tests/contract/test_chromadb_contract.py`
+- [x] T015 [P] Contract test ChromaDB `list_collections` in `tests/contract/test_chromadb_contract.py`
+- [x] T016 [P] Contract test ChromaDB `delete_collection` in `tests/contract/test_chromadb_contract.py`
+- [x] T017 [P] Contract test CLI `index` command in `tests/contract/test_cli_contract.py`
+- [x] T018 [P] Contract test CLI `search` command in `tests/contract/test_cli_contract.py`
+- [x] T019 [P] Contract test CLI `list` command in `tests/contract/test_cli_contract.py`
+- [x] T020 [P] Contract test CLI `remove` command in `tests/contract/test_cli_contract.py`
+- [x] T021 [P] Contract test CLI global options (--db-path, --verbose) in `tests/contract/test_cli_contract.py`
 
 ### Edge Case Tests
-- [ ] T022 [P] Edge case test malformed frontmatter in `tests/unit/test_cleaning_edge_cases.py`
-- [ ] T023 [P] Edge case test nested shortcodes in `tests/unit/test_cleaning_edge_cases.py`
-- [ ] T024 [P] Edge case test nested code fences in `tests/unit/test_cleaning_edge_cases.py`
-- [ ] T025 [P] Edge case test Unicode characters in `tests/unit/test_cleaning_edge_cases.py`
+- [x] T022 [P] Edge case test malformed frontmatter in `tests/unit/test_cleaning_edge_cases.py`
+- [x] T023 [P] Edge case test nested shortcodes in `tests/unit/test_cleaning_edge_cases.py`
+- [x] T024 [P] Edge case test nested code fences in `tests/unit/test_cleaning_edge_cases.py`
+- [x] T025 [P] Edge case test Unicode characters in `tests/unit/test_cleaning_edge_cases.py`
 
 ## Phase 3.3: Data Models (ONLY after tests are failing)
 
-- [ ] T026 [P] `DocumentChunk` Pydantic model in `src/models/document.py`
-- [ ] T027 [P] `CollectionMetadata` Pydantic model in `src/models/collection.py`
-- [ ] T028 [P] `RetrievalResult` Pydantic model in `src/models/retrieval.py`
-- [ ] T029 [P] Model validation logic and custom validators
+- [x] T026 [P] `DocumentChunk` Pydantic model in `src/models/document.py`
+- [x] T027 [P] `CollectionMetadata` Pydantic model in `src/models/collection.py`
+- [x] T028 [P] `RetrievalResult` Pydantic model in `src/models/retrieval.py`
+- [x] T029 [P] Model validation logic and custom validators
 
 ## Phase 3.4: Core Implementation - Cleaning Pipeline
 
-- [ ] T030 [P] Implement `parse_frontmatter` (YAML/TOML) in `src/cleaning/frontmatter.py`
-- [ ] T031 [P] Implement `clean_shortcodes` (content extraction) in `src/cleaning/shortcodes.py`
-- [ ] T032 [P] Implement `clean_code_fences` (attribute removal) in `src/cleaning/code_fences.py`
-- [ ] T033 [P] Implement `clean_links` (ref/relref conversion) in `src/cleaning/links.py`
-- [ ] T034 [P] Implement `normalize_whitespace` (preserve structure) in `src/cleaning/whitespace.py`
-- [ ] T035 Implement `clean_markdown` orchestration pipeline in `src/cleaning/pipeline.py`
-- [ ] T036 [P] Compile regex patterns as module constants in `src/cleaning/patterns.py`
+- [x] T030 [P] Implement `parse_frontmatter` (YAML/TOML) in `src/cleaning/frontmatter.py`
+- [x] T031 [P] Implement `clean_shortcodes` (content extraction) in `src/cleaning/shortcodes.py`
+- [x] T032 [P] Implement `clean_code_fences` (attribute removal) in `src/cleaning/code_fences.py`
+- [x] T033 [P] Implement `clean_links` (ref/relref conversion) in `src/cleaning/links.py`
+- [x] T034 [P] Implement `normalize_whitespace` (preserve structure) in `src/cleaning/whitespace.py`
+- [x] T035 Implement `clean_markdown` orchestration pipeline in `src/cleaning/pipeline.py`
+- [x] T036 [P] Compile regex patterns as module constants in `src/cleaning/patterns.py`
 
 ## Phase 3.5: Core Implementation - ChromaDB Wrapper
 
-- [ ] T037 Implement `ChromaDBClient` initialization in `src/storage/chromadb_client.py`
-- [ ] T038 Implement `create_collection` with metadata in `src/storage/chromadb_client.py`
-- [ ] T039 Implement `add_chunks` batching (batch_size=100) in `src/storage/chromadb_client.py`
-- [ ] T040 Implement `search_chunks` with filters in `src/storage/chromadb_client.py`
-- [ ] T041 Implement `get_collection_metadata` in `src/storage/chromadb_client.py`
-- [ ] T042 Implement `list_collections` with sorting in `src/storage/chromadb_client.py`
-- [ ] T043 Implement `delete_collection` with confirmation in `src/storage/chromadb_client.py`
+- [x] T037 Implement `ChromaDBClient` initialization in `src/storage/chromadb_client.py`
+- [x] T038 Implement `create_collection` with metadata in `src/storage/chromadb_client.py`
+- [x] T039 Implement `add_chunks` batching (batch_size=100) in `src/storage/chromadb_client.py`
+- [x] T040 Implement `search_chunks` with filters in `src/storage/chromadb_client.py`
+- [x] T041 Implement `get_collection_metadata` in `src/storage/chromadb_client.py`
+- [x] T042 Implement `list_collections` with sorting in `src/storage/chromadb_client.py`
+- [x] T043 Implement `delete_collection` with confirmation in `src/storage/chromadb_client.py`
 
 ## Phase 3.6: Core Implementation - Document Processing
 
-- [ ] T044 [P] Implement file discovery (glob Markdown) in `src/processing/file_discovery.py`
-- [ ] T045 [P] Implement chunking strategy (heading-based) in `src/processing/chunker.py`
-- [ ] T046 [P] Implement heading context extraction in `src/processing/context_extractor.py`
-- [ ] T047 [P] Implement metadata enrichment (frontmatter + git) in `src/processing/metadata.py`
-- [ ] T048 Implement main indexing orchestration in `src/processing/indexer.py`
+- [x] T044 [P] Implement file discovery (glob Markdown) in `src/processing/file_discovery.py`
+- [x] T045 [P] Implement chunking strategy (heading-based) in `src/processing/chunker.py`
+- [x] T046 [P] Implement heading context extraction in `src/processing/context_extractor.py`
+- [x] T047 [P] Implement metadata enrichment (frontmatter + git) in `src/processing/metadata.py`
+- [x] T048 Implement main indexing orchestration in `src/processing/indexer.py`
 
 ## Phase 3.7: Core Implementation - CLI
 
-- [ ] T049 Implement CLI entry point with Click framework in `src/cli/main.py`
-- [ ] T050 Implement `hetriever index` command in `src/cli/commands/index.py`
-- [ ] T051 Implement `hetriever search` command in `src/cli/commands/search.py`
-- [ ] T052 Implement `hetriever list` command in `src/cli/commands/list.py`
-- [ ] T053 Implement `hetriever remove` command in `src/cli/commands/remove.py`
-- [ ] T054 [P] Implement global options (--db-path, --verbose) in `src/cli/options.py`
-- [ ] T055 [P] Implement output formatters (text, JSON) in `src/cli/formatters.py`
+- [x] T049 Implement CLI entry point with Click framework in `src/cli/main.py`
+- [x] T050 Implement `hetriever index` command in `src/cli/commands/index.py`
+- [x] T051 Implement `hetriever search` command in `src/cli/commands/search.py`
+- [x] T052 Implement `hetriever list` command in `src/cli/commands/list.py`
+- [x] T053 Implement `hetriever remove` command in `src/cli/commands/remove.py`
+- [x] T054 [P] Implement global options (--db-path, --verbose) in `src/cli/options.py`
+- [x] T055 [P] Implement output formatters (text, JSON) in `src/cli/formatters.py`
 
 ## Phase 3.8: Integration Tests (Quickstart Scenarios)
 
-- [ ] T056 [P] Integration test Phase 1: Indexing Istio docs in `tests/integration/test_quickstart_indexing.py`
-- [ ] T057 [P] Integration test Phase 2: Basic search queries in `tests/integration/test_quickstart_search.py`
-- [ ] T058 [P] Integration test Phase 3: Advanced search (filters, JSON) in `tests/integration/test_quickstart_advanced.py`
-- [ ] T059 [P] Integration test Phase 4: Collection management in `tests/integration/test_quickstart_collections.py`
-- [ ] T060 [P] Integration test Phase 5: Reindexing and updates in `tests/integration/test_quickstart_updates.py`
-- [ ] T061 [P] Integration test Phase 6: Error handling in `tests/integration/test_quickstart_errors.py`
+- [x] T056 [P] Integration test indexing workflow in `tests/integration/test_indexing_workflow.py`
+- [x] T057 [P] Integration test search workflow in `tests/integration/test_search_workflow.py`
+- [x] T058 [P] Integration test repository management in `tests/integration/test_repository_management.py`
+- [x] T059 [P] Integration test error handling and edge cases in `tests/integration/test_error_handling.py`
+- [x] T060 [P] Integration test performance baselines in `tests/integration/test_performance_baselines.py`
+- [x] T061 [P] Integration test CLI contract validation in `tests/integration/test_cli_contract_validation.py`
 
 ## Phase 3.9: Performance Validation
 
-- [ ] T062 [P] Benchmark cleaning throughput (10K+ lines/sec) in `tests/benchmarks/test_cleaning_performance.py`
-- [ ] T063 [P] Benchmark indexing throughput (247 files <60s) in `tests/benchmarks/test_indexing_performance.py`
-- [ ] T064 [P] Benchmark search latency (p95 <100ms) in `tests/benchmarks/test_search_performance.py`
-- [ ] T065 [P] Memory profiling (<512MB peak) in `tests/benchmarks/test_memory_usage.py`
+- [x] T062 [P] Benchmark cleaning throughput (10K+ lines/sec) in `tests/benchmarks/test_cleaning_performance.py`
+- [x] T063 [P] Benchmark indexing throughput (247 files <60s) in `tests/benchmarks/test_indexing_performance.py`
+- [x] T064 [P] Benchmark search latency (p95 <100ms) in `tests/benchmarks/test_search_performance.py`
+- [x] T065 [P] Memory profiling (<512MB peak) in `tests/benchmarks/test_memory_usage.py`
 
 ## Phase 3.10: Polish
 
-- [ ] T066 [P] Property-based tests with `hypothesis` for cleaning functions in `tests/property/test_cleaning_properties.py`
-- [ ] T067 [P] Error handling and logging in all modules
-- [ ] T068 [P] Add type hints and docstrings (Google style)
-- [ ] T069 Run `ruff check .` and fix all linting issues
-- [ ] T070 Run `pytest` and verify all tests pass
-- [ ] T071 [P] Update README.md with installation and usage
-- [ ] T072 [P] Create example justfile recipes (test, lint, benchmark)
+- [x] T066 [P] Property-based tests with `hypothesis` for cleaning functions in `tests/property/test_cleaning_properties.py`
+- [x] T067 [P] Error handling and logging in all modules
+- [x] T068 [P] Add type hints and docstrings (Google style)
+- [x] T069 Run `ruff check .` and fix all linting issues
+- [x] T070 Run `pytest` and verify all tests pass
+- [x] T071 [P] Update README.md with installation and usage
+- [x] T072 [P] Create example justfile recipes (test, lint, benchmark)
 
 ## Dependencies
 

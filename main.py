@@ -1,5 +1,5 @@
-def main():
-    print("Hello from hetriever!")
+def main() -> None:
+    pass
 
 
 if __name__ == "__main__":
