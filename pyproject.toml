@@ -8,6 +8,7 @@ dependencies = [
     "chromadb",
     "click>=8.3.0",
     "pyyaml",
+    "sentence-transformers>=5.1.1",
 ]
 
 [project.optional-dependencies]

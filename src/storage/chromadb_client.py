@@ -74,16 +74,26 @@ class ChromaDBClient:
         client: ChromaDB PersistentClient instance.
     """
 
-    def __init__(self, path: str = "./chroma_data"):
+    def __init__(
+        self,
+        path: str = "./chroma_data",
+        embedding_model: str = "sentence-transformers/all-mpnet-base-v2",
+    ):
         """Initialize ChromaDB client.
 
         Args:
             path: Directory path for ChromaDB persistent storage.
+            embedding_model: HuggingFace embedding model to use.
 
         Raises:
             ChromaDBConnectionError: If connection to ChromaDB fails.
         """
         try:
+            from chromadb.utils import embedding_functions
+
+            self._embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+                model_name=embedding_model
+            )
             self.client = PersistentClient(
                 path=path,
                 settings=Settings(
@@ -132,6 +142,7 @@ class ChromaDBClient:
             return self.client.create_collection(
                 name=repository_name,
                 metadata=metadata,
+                embedding_function=self._embedding_function,  # type: ignore
             )
         except Exception as e:
             raise ChromaDBConnectionError(f"Failed to create collection: {e}") from e
@@ -149,7 +160,9 @@ class ChromaDBClient:
             CollectionNotFoundError: If collection does not exist.
         """
         try:
-            return self.client.get_collection(repository_name)
+            return self.client.get_collection(
+                repository_name, embedding_function=self._embedding_function
+            )  # type: ignore
         except Exception as e:
             raise CollectionNotFoundError(f"Collection '{repository_name}' not found") from e
 
@@ -278,11 +291,11 @@ class ChromaDBClient:
                         chunk_id=ids_list[0][i],
                         content=documents_list[0][i],
                         score=score,
-                        repository=metadata["repository"],
-                        file_path=metadata["file_path"],
-                        heading_context=metadata["heading_context"],
+                        repository=str(metadata["repository"]),
+                        file_path=str(metadata["file_path"]),
+                        heading_context=str(metadata["heading_context"]),
                         metadata={
-                            k: v
+                            k: str(v) if not isinstance(v, (list, bool)) else v
                             for k, v in metadata.items()
                             if k
                             not in ["repository", "file_path", "heading_context", "chunk_index"]

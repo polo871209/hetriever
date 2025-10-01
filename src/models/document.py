@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -27,7 +28,7 @@ class DocumentChunk(BaseModel):
     heading_context: str
     chunk_index: int = Field(ge=0)
     token_count: int = Field(ge=100, le=2000)
-    metadata: dict[str, str | bool | list[str]]
+    metadata: dict[str, Any]
 
     @field_validator("content")
     @classmethod
