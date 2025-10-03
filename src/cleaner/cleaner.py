@@ -18,7 +18,7 @@ class Cleaner:
                 if not fm_content:
                     return {}, body
                 frontmatter = yaml.safe_load(fm_content)
-                return frontmatter if frontmatter else {}, body
+                return (frontmatter or {}, body)
             except yaml.YAMLError:
                 return {}, content
 
@@ -30,7 +30,7 @@ class Cleaner:
                 if not fm_content:
                     return {}, body
                 frontmatter = tomllib.loads(fm_content)
-                return frontmatter if frontmatter else {}, body
+                return (frontmatter or {}, body)
             except tomllib.TOMLDecodeError:
                 return {}, content
 
