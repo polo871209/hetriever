@@ -16,6 +16,7 @@ ENV/
 .benchmarks/
 .coverage
 htmlcov/
+.hypothesis/
 
 # Tools
 .ruff_cache/

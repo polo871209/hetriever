@@ -1,13 +1,8 @@
 import pytest
 
-from src.cleaning import (
-    clean_code_fences,
-    clean_links,
-    clean_markdown,
-    clean_shortcodes,
-    normalize_whitespace,
-    parse_frontmatter,
-)
+from src.cleaner import Cleaner
+
+cleaner = Cleaner()
 
 
 @pytest.fixture
@@ -53,7 +48,7 @@ def large_markdown():
 
 @pytest.mark.benchmark
 def test_clean_markdown_throughput(benchmark, large_markdown):
-    result = benchmark(clean_markdown, large_markdown)
+    result = benchmark(cleaner.clean_markdown, large_markdown)
     assert result is not None
     line_count = large_markdown.count("\n") + 1
     stats = benchmark.stats.stats
@@ -63,41 +58,41 @@ def test_clean_markdown_throughput(benchmark, large_markdown):
 
 @pytest.mark.benchmark
 def test_parse_frontmatter_performance(benchmark, large_markdown):
-    result = benchmark(parse_frontmatter, large_markdown)
+    result = benchmark(cleaner.parse_frontmatter, large_markdown)
     assert result is not None
 
 
 @pytest.mark.benchmark
 def test_clean_links_performance(benchmark, large_markdown):
-    _, body = parse_frontmatter(large_markdown)
-    result = benchmark(clean_links, body)
+    _, body = cleaner.parse_frontmatter(large_markdown)
+    result = benchmark(cleaner.clean_links, body)
     assert result is not None
 
 
 @pytest.mark.benchmark
 def test_clean_shortcodes_performance(benchmark, large_markdown):
-    _, body = parse_frontmatter(large_markdown)
-    result = benchmark(clean_shortcodes, body)
+    _, body = cleaner.parse_frontmatter(large_markdown)
+    result = benchmark(cleaner.clean_shortcodes, body)
     assert result is not None
 
 
 @pytest.mark.benchmark
 def test_clean_code_fences_performance(benchmark, large_markdown):
-    _, body = parse_frontmatter(large_markdown)
-    result = benchmark(clean_code_fences, body)
+    _, body = cleaner.parse_frontmatter(large_markdown)
+    result = benchmark(cleaner.clean_code_fences, body)
     assert result is not None
 
 
 @pytest.mark.benchmark
 def test_normalize_whitespace_performance(benchmark, large_markdown):
-    _, body = parse_frontmatter(large_markdown)
-    result = benchmark(normalize_whitespace, body)
+    _, body = cleaner.parse_frontmatter(large_markdown)
+    result = benchmark(cleaner.normalize_whitespace, body)
     assert result is not None
 
 
 @pytest.mark.benchmark
 def test_full_pipeline_performance(benchmark, sample_markdown):
-    result = benchmark(clean_markdown, sample_markdown)
+    result = benchmark(cleaner.clean_markdown, sample_markdown)
     frontmatter, body = result
     assert isinstance(frontmatter, dict)
     assert isinstance(body, str)

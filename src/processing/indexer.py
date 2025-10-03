@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-from src.cleaning.pipeline import clean_markdown
+from src.cleaner import Cleaner
 from src.models.document import DocumentChunk
 from src.processing.chunker import chunk_by_headings
 from src.processing.context_extractor import extract_heading_hierarchy
@@ -19,29 +19,6 @@ def index_repository(
     target_tokens: int = 800,
     batch_size: int = 100,
 ) -> dict[str, int]:
-    """Index all markdown files from a repository into ChromaDB.
-
-    Main orchestration function that:
-    1. Discovers markdown files
-    2. Cleans and extracts frontmatter
-    3. Chunks content by headings
-    4. Extracts heading hierarchy context
-    5. Enriches metadata
-    6. Stores chunks in ChromaDB with embeddings
-
-    Args:
-        repository_path: Path to repository root directory.
-        repository_name: Human-readable repository identifier.
-        db_path: ChromaDB storage directory path.
-        target_tokens: Target token count per chunk (default 800).
-        batch_size: Number of chunks to add per batch (default 100).
-
-    Returns:
-        Dictionary with 'files_processed' and 'chunks_created' counts.
-
-    Raises:
-        FileNotFoundError: If repository_path does not exist.
-    """
     logger.info(f"Starting indexing for repository: {repository_name} at {repository_path}")
 
     if not repository_path.exists():
@@ -63,6 +40,7 @@ def index_repository(
     collection = db_client.create_collection(sanitized_name, collection_metadata)
     logger.info(f"Created collection: {sanitized_name}")
 
+    cleaner = Cleaner()
     all_chunks: list[DocumentChunk] = []
     total_chunks = 0
     failed_files = 0
@@ -72,7 +50,7 @@ def index_repository(
             logger.debug(f"Processing file: {file_path}")
             content = file_path.read_text(encoding="utf-8")
 
-            frontmatter, cleaned_body = clean_markdown(content)
+            frontmatter, cleaned_body = cleaner.clean_markdown(content)
 
             chunks = chunk_by_headings(cleaned_body, target_tokens=target_tokens)
 
